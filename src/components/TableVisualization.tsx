@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react";
 import { ProcessResponse } from "../interface/processResponse.interface";
+import { GiNightSleep } from "react-icons/gi";
+import { BsPersonWorkspace } from "react-icons/bs";
+import { CiTimer } from "react-icons/ci";
+import { FaCheck } from "react-icons/fa";
 
-export const TableVisualization = ({data}:{data: ProcessResponse}) => {
+export const TableVisualization = ({ data }: { data: ProcessResponse }) => {
   const [currentColumn, setCurrentColumn] = useState(0);
 
   useEffect(() => {
@@ -35,41 +39,53 @@ export const TableVisualization = ({data}:{data: ProcessResponse}) => {
           <div>PROCESO EN ESPERA</div>
         </div>
       </div>
-      <table>
-        <thead>
-          <tr>
-            <th className="w-32 bg-orange-300">ProcessID</th>
-            {data.times.map((time, index) => (
-              <th className="w-20 bg-orange-300" key={index}>
-                {time}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {data.data.map(({ processID, array }) => (
-            <tr key={processID}>
-              <td className="border-[1px] border-black">{processID}</td>
-              {array
-                .map((a, index) => (
-                  <td
-                    key={index}
-                    className={`border-[1px] border-black ${
-                      a === 1
-                        ? "bg-orange-400"
-                        : a === 2
-                        ? "bg-blue-700"
-                        : a === 3
-                        ? "bg-green-900"
-                        : "bg-pink-100"
-                    }`}
-                  ></td>
-                ))
-                .slice(0, currentColumn + 1)}
+      <div className=" max-w-[90em] overflow-auto">
+        <table>
+          <thead>
+            <tr>
+              <th className="w-32 bg-orange-300">ProcessID</th>
+              {data.times.map((time, index) => (
+                <th className="w-20 bg-orange-300" key={index}>
+                  {time}
+                </th>
+              ))}
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {data.data.map(({ processID, array }) => (
+              <tr key={processID}>
+                <td className="border-[1px] border-black">{processID}</td>
+                {array
+                  .map((a, index) => (
+                    <td
+                      key={index}
+                      className={`border-[1px] border-black ${
+                        a === 1
+                          ? "bg-orange-400"
+                          : a === 2
+                          ? "bg-blue-700"
+                          : a === 3
+                          ? "bg-green-900"
+                          : "bg-pink-100"
+                      }`}
+                    >
+                      <div className="flex flex-col items-center">
+                        {a === 1 ? (
+                          <CiTimer />
+                        ) : a === 2 ? (
+                          <BsPersonWorkspace />
+                        ) : a === 3 && (
+                          <FaCheck />
+                        ) }
+                      </div>
+                    </td>
+                  ))
+                  .slice(0, currentColumn + 1)}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };

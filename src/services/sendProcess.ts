@@ -6,13 +6,21 @@ import { data } from "../data";
 export const sendProcess = async ({
   process,
   algorithmVisualize,
+  quantum
 }: {
   process: Process[];
   algorithmVisualize: Algorithm;
+  quantum:number
 }): Promise<ProcessResponse> => {
   try {
-    const res = await axios.post<ProcessResponse>("/api/algorithms", { process, algorithm: algorithmVisualize });
+    const res = await axios.post<ProcessResponse>("/planificar", {
+      processes: process,
+      algorithm: algorithmVisualize,
+      quantum,
+    });
     return res.data;
+
+    
   } catch (err) {
     return data;
   }

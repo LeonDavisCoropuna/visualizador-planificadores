@@ -12,10 +12,14 @@ import { GantChart } from "./components/GantChart";
 import { Algorithm } from "./interface/algorithm.enum";
 import { sendProcess } from "./services/sendProcess";
 import { ProcessResponse } from "./interface/processResponse.interface";
+import { Test } from "./components/animation/Test";
+import { AnimationCPU } from "./components/AnimationCPU";
+import { TableResult } from "./components/TableResult";
 
 function App() {
   const [isOpenModal, openModal, closeModal] = useModal();
   const [isOpenModal2, openModal2, closeModal2] = useModal();
+  const [key, setKey] = useState<number>(0);
 
   const {
     algorithm,
@@ -33,9 +37,10 @@ function App() {
     id: algorithm.length + 1,
     arrivalTime: null,
     burstTime: null,
-    priority: null,
   });
   const [idProcessEdit, setIdProcessEdit] = useState<number>(0);
+  const [quantum, setQuantum] = useState<number>(0);
+
   const [responseAlgorithms, setResponseAlgorithms] =
     useState<ProcessResponse | null>(null);
   useEffect(() => {
@@ -48,10 +53,13 @@ function App() {
         id: idProcessEdit,
         arrivalTime: null,
         burstTime: null,
-        priority: null,
       }
     );
   }, [idProcessEdit]);
+  useEffect(() => {
+    // Actualizar la clave cada vez que responseAlgorithms cambia
+    setKey(key + 1);
+  }, [responseAlgorithms]);
 
   const handleNewProcess = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewProcess({
@@ -77,7 +85,6 @@ function App() {
       id: algorithm.length + 1,
       arrivalTime: null,
       burstTime: null,
-      priority: null,
     });
   };
 
@@ -107,11 +114,13 @@ function App() {
     const res = await sendProcess({
       process: processes,
       algorithmVisualize: algorithmVisualize,
+      quantum,
     });
     setResponseAlgorithms(res);
+    setKey((prev) => prev + 1);
   };
   return (
-    <div className="flex flex-col items-center h-screen relative">
+    <div className="flex flex-col items-center relative">
       <Title title="Visualizador de Procesos" />
       <div className="max-h-[25em] overflow-auto">
         <table>
@@ -120,7 +129,6 @@ function App() {
               <th>ID Process</th>
               <th>Burst Time</th>
               <th>Arrival Time</th>
-              <th>Priotity</th>
               <th>Option</th>
             </tr>
           </thead>
@@ -133,7 +141,6 @@ function App() {
                 <td>{p.id}</td>
                 <td>{p.burstTime}</td>
                 <td>{p.arrivalTime}</td>
-                <td>{p.priority}</td>
                 <td className="text-center">
                   <button onClick={() => handleDeleteProcess(p.id)}>
                     <MdDelete size={20} color="red" />
@@ -158,9 +165,20 @@ function App() {
         >
           <option value="FCFS">FCFS</option>
           <option value="SJF">SJF</option>
-          <option value="PRIORITY">PRIORITY</option>
           <option value="ROUND_ROBIN">ROUND_ROBIN</option>
         </select>
+        {algorithmVisualize === "ROUND_ROBIN" ? (
+          <div>
+            <strong>QUANTUM: </strong>
+            <input
+              className="w-12 border-black border-[1px]"
+              value={quantum}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setQuantum(Number(e.target.value))
+              }
+            />
+          </div>
+        ) : null}
         <button className="bg-green-600" onClick={handleSubmitExecute}>
           EXECUTE
         </button>
@@ -199,17 +217,7 @@ function App() {
               />
             </label>
           </div>
-          <div>
-            <label className="flex items-center">
-              <h2 className="w-24 ">Priority:</h2>
-              <input
-                className="w-24 border-[1px] border-gray-500 rounded-md pl-2 py-1"
-                onChange={handleNewProcess}
-                name="priority"
-                value={newProcess.priority ? newProcess.priority : ""}
-              />
-            </label>
-          </div>
+
           <div>
             <button
               className="bg-green-400 w-48 py-1 rounded-md"
@@ -233,7 +241,7 @@ function App() {
             <h2 className="w-24 ">ID Process: </h2>
             <select className="w-32 " onChange={handleChangeSelectProcess}>
               {processes.map((p) => (
-                <option>Proceso {p.id}</option>
+                <option key={p.id}>Proceso {p.id}</option>
               ))}
             </select>
           </div>
@@ -259,17 +267,7 @@ function App() {
               />
             </label>
           </div>
-          <div>
-            <label className="flex items-center">
-              <h2 className="w-24 ">Priority:</h2>
-              <input
-                className="w-24 border-[1px] border-gray-500 rounded-md pl-2 py-1"
-                onChange={handleNewProcess}
-                name="priority"
-                value={newProcess.priority ? newProcess.priority : ""}
-              />
-            </label>
-          </div>
+
           <div>
             <button
               className="bg-green-400 w-48 py-1 rounded-md"
@@ -282,10 +280,16 @@ function App() {
       </Modal>
       {responseAlgorithms ? (
         <>
-          <TableVisualization data={responseAlgorithms} />
-          <GantChart data={responseAlgorithms} />
+          <TableVisualization key={`table-${key}`} data={responseAlgorithms} />
+          <AnimationCPU  gantt={responseAlgorithms.gantt} />
+          <GantChart key={`chart-${key}`} data={responseAlgorithms} />
+          <TableResult
+            result={responseAlgorithms.table}
+            title="TABLA DE TIEMPOS"
+          />
         </>
       ) : null}
+
     </div>
   );
 }

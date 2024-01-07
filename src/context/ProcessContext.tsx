@@ -43,10 +43,12 @@ export const ProcessProvider = ({
   const [processVisualization, setProcessVisualization] =
     useState<ProcessResponse | null>(null);
   const [processes, setProcesses] = useState<Process[]>([
-    { arrivalTime: 7, burstTime: 12, id: 1, priority: 5 },
-    { arrivalTime: 6, burstTime: 23, id: 2, priority: 5 },
-    { arrivalTime: 5, burstTime: 34, id: 3, priority: 5 },
-    { arrivalTime: 4, burstTime: 45, id: 4, priority: 5 },
+    { arrivalTime: 4, burstTime: 1, id: 1},
+    { arrivalTime: 0, burstTime: 5, id: 2},
+    { arrivalTime: 1, burstTime: 4, id: 3},
+    { arrivalTime: 8, burstTime: 3, id: 4},
+    { arrivalTime: 12, burstTime: 2, id: 5},
+
   ]);
 
   const addProcess = (process: Process) => {
