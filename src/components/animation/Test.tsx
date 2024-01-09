@@ -13,6 +13,21 @@ export const Test = ({
   proccessID: number;
   isInQueue: boolean;
 }) => {
+  useEffect(() => {
+    console.log("Component Test mounted with props:", {
+      newX,
+      newY,
+      time,
+      proccessID,
+      isInQueue,
+    });
+
+    // Cleanup function (componentWillUnmount equivalent)
+    return () => {
+      console.log("Component Test unmounted");
+    };
+  }, []); // Empty dependency array ensures this effect runs only once on mount
+
   const [props] = useSpring(() => ({
     from: { x: 0, y: 50, backgroundColor: "blue", rotate: 0 },
     to: async (next) => {
@@ -109,7 +124,7 @@ export const Test = ({
       //   backgroundColor: "orange",
       // });
     },
-    config: { duration: 100},
+    config: { duration: 2000},
     
   }));
 

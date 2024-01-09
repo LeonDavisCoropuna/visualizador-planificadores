@@ -39,16 +39,28 @@ export const AnimationCPU = ({ gantt }: { gantt: Gantt[] }) => {
 
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentIndex((prevIndex) =>
-        prevIndex + 1 < testData.length ? prevIndex + 1 : prevIndex
-      );
-    }, 10);
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     setCurrentIndex((prevIndex) =>
+  //       prevIndex + 1 < testData.length ? prevIndex + 1 : prevIndex
+  //     );
+  //   }, 10);
 
-    // Cleanup interval on component unmount or when all tests are created
-    return () => clearInterval(interval);
-  }, [currentIndex, testData.length]);
+  //   // Cleanup interval on component unmount or when all tests are created
+  //   return () => clearInterval(interval);
+  // }, [currentIndex, testData.length]);
+
+  const renderTests = (index: number) => {
+    if (index < testData.length) {
+      setTimeout(() => {
+        setCurrentIndex(index + 1);
+      }, 1000);
+    }
+  };
+
+  useEffect(() => {
+    renderTests(currentIndex);
+  }, [currentIndex, testData]);
 
   return (
     <div className="border-[1px] border-black mt-20 relative h-[30em] w-[70em] flex ">
