@@ -15,6 +15,7 @@ import { ProcessResponse } from "./interface/processResponse.interface";
 import { Test } from "./components/animation/Test";
 import { AnimationCPU } from "./components/AnimationCPU";
 import { TableResult } from "./components/TableResult";
+import { loadProcesses } from "./services/loadProcess";
 
 function App() {
   const [isOpenModal, openModal, closeModal] = useModal();
@@ -119,6 +120,33 @@ function App() {
     setResponseAlgorithms(res);
     setKey((prev) => prev + 1);
   };
+
+  const handleLoadProcess = async () => {
+    const res = await loadProcesses();
+    console.log(res);
+    // Actualizar el estado de los procesos con los datos cargados
+    setAlgorithmVisualize(Algorithm.FCFS); // Puedes ajustar el algoritmo predeterminado si es necesario
+    setQuantum(0); // Reiniciar el quantum
+
+    setNewProcess({
+      id: algorithm.length + 1,
+      arrivalTime: null,
+      burstTime: null,
+    });
+
+    setResponseAlgorithms(null); // Reiniciar el estado de respuesta
+
+    // Actualizar el estado de los procesos con los datos cargados
+    processes.length = 0; // Limpiar el array existente
+    processes.push(...res); // Agregar los nuevos procesos
+
+
+    // Opcional: Si deseas cambiar el enfoque de edición a un nuevo proceso
+    setIdProcessEdit(processes[processes.length - 1].id);
+
+    // Actualizar la clave para forzar la renderización
+    setKey((prev) => prev + 1);
+  };
   return (
     <div className="flex flex-col items-center relative">
       <Title title="Visualizador de Procesos" />
@@ -153,6 +181,9 @@ function App() {
       </div>
 
       <div className="flex justify-between w-full px-20 [&>*]:w-48 [&>*]:text-center pt-5 [&>*]:py-2">
+        <button className="bg-green-600" onClick={handleLoadProcess}>
+          LOAD
+        </button>
         <button className="bg-green-400" onClick={() => openModal()}>
           Add process
         </button>

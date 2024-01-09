@@ -22,6 +22,7 @@ export const AnimationCPU = ({ gantt }: { gantt: Gantt[] }) => {
   };
   
   useEffect(() => {
+    console.log("Efecto secundario ejecutado con nuevos datos:", gantt);
     setTestData(
       gantt.map(({ end, proccessID, start }, index) => ({
         end,
@@ -43,7 +44,7 @@ export const AnimationCPU = ({ gantt }: { gantt: Gantt[] }) => {
       setCurrentIndex((prevIndex) =>
         prevIndex + 1 < testData.length ? prevIndex + 1 : prevIndex
       );
-    }, 1000);
+    }, 10);
 
     // Cleanup interval on component unmount or when all tests are created
     return () => clearInterval(interval);
@@ -66,7 +67,7 @@ export const AnimationCPU = ({ gantt }: { gantt: Gantt[] }) => {
       <div className="mt-30 ml-30 w-[38em] bg-blue-400 flex items-center h-full justify-center">
         <div className="pt-5 w-24 h-24 bg-yellow-500 text-center">CPU</div>
       </div>
-      <div className="w-[18em] bg-cyan-500"></div>
+      <div className="w-[18em] bg-cyan-500">FINISH</div>
     </div>
   );
 };

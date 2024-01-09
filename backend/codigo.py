@@ -4,6 +4,7 @@ from typing import List, Optional
 from enum import Enum
 import copy
 import json
+import random
 app = Flask(__name__)
 CORS(app)
 class Algorithm(Enum):
@@ -204,7 +205,19 @@ def select_algortimo(algoritmo, procesos_lst, quantum):
         temp = obtener_matriz(procesos, gantt)
         return (procesos, temp, gantt)
     return None
-        
+
+def generar_tres_procesos():
+    procesos_array = []
+
+    for _ in range(3):
+        job = f"Job_{random.randint(1, 100)}"
+        burst_time = random.randint(1, 10)
+        arrival_time = random.randint(0, 5)
+
+        nuevo_proceso = Proceso(job, burst_time, arrival_time)
+        procesos_array.append(nuevo_proceso)
+
+    return procesos_array        
 
 @app.route('/planificar', methods=['POST'])
 def planificar():
@@ -262,7 +275,23 @@ def planificar():
     return jsonify(json_result)
 
     
+# Nueva ruta para el controlador GET
+@app.route('/loadProcess', methods=['GET'])
+def obtener_procesos():
+    # Aquí puedes devolver una lista de nombres de algoritmos o cualquier otro dato que desees para la solicitud GET.
+    procesos_so_linux = generar_tres_procesos()
+    formatted_procesos = []
+    for proceso in procesos_so_linux:
+        formatted_proceso = {
+            'id': int(proceso.job.split('_')[1]),
+            'arrivalTime': proceso.arrival_time,
+            'burstTime': proceso.burst_time
+        }
+        formatted_procesos.append(formatted_proceso)
 
+    
+
+    return jsonify(formatted_procesos)
     
 
 

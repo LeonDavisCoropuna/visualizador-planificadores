@@ -1,5 +1,5 @@
 import { useSpring, animated } from "react-spring";
-
+import { useEffect } from "react";
 export const Test = ({
   newX,
   newY,
@@ -83,24 +83,37 @@ export const Test = ({
         }
       } else {
         //a la derecha proceso terminado
+        
+        
+
         await next({
-          x: 800,
-          y: 220.2058,
-          backgroundColor: "pink",
+          x: 950,
+          y: 100 + newY,
+          backgroundColor: "bg-green-900",
           config: { duration: 500 },
           rotate: 360,
         });
+
+        // await next({
+        //   x: 136,
+        //   y: 400 - newY,
+        //   backgroundColor: "orange",
+        //   config: { duration: 3000 },
+        // });
         /**codigooo */
       }
 
-      await next({
-        x: 136,
-        y: 300 - newY,
-        backgroundColor: "orange",
-      });
+      // await next({
+      //   x: 136,
+      //   y: 300 - newY,
+      //   backgroundColor: "orange",
+      // });
     },
-    config: { duration: 1000 },
+    config: { duration: 100},
+    
   }));
+
+  
 
   return (
     <div>
