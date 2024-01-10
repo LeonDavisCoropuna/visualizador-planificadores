@@ -150,7 +150,7 @@ function App() {
   return (
     <div className="flex flex-col items-center relative">
       <Title title="Visualizador de Procesos" />
-      <div className="max-h-[25em] overflow-auto">
+      <div className="max-h-[25em] overflow-auto text-center">
         <table>
           <thead className="px-32">
             <tr className="px-32 [&>th]:bg-gray-500 [&>th]:w-72">
@@ -207,6 +207,7 @@ function App() {
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 setQuantum(Number(e.target.value))
               }
+              type="number"
             />
           </div>
         ) : null}

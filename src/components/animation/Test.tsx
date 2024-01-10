@@ -34,22 +34,18 @@ export const Test = ({
   
   
   const [props, set] = useSpring(() => ({
-    from: { x: 0, y: 50, backgroundColor: "blue", rotate: 0 },
+    from: { x: 0, y: 50, backgroundColor: "pink", rotate: 0 },
     to: async (next) => {
       // Guardar el objeto creado en el estado
       
 
-      await next({ x: 136, y: 50, backgroundColor: "orange" });
+      await next({ x: 136, y: 50, backgroundColor: "pink" });
+      
       await next({
         x: 136,
         y: 400 - newY,
         backgroundColor: "orange",
-        config: { duration: 500 },
-      });
-      await next({
-        x: 136,
-        y: 400 - newY,
-        backgroundColor: "pink",
+        opacity: 1,
         config: { duration: 500 + time },
       });
 
@@ -59,35 +55,35 @@ export const Test = ({
         await next({
           x,
           y,
-          backgroundColor: "green",
+          backgroundColor: "orange",
           config: { duration: 1 }, // Duración del bucle
         });
       }
       await next({
         x: 500,
         y: 220.2058,
-        backgroundColor: "pink",
+        backgroundColor: "blue",
         config: { duration: 100 },
         rotate: 90,
       });
       await next({
         x: 500,
         y: 220.2058,
-        backgroundColor: "pink",
+        backgroundColor: "blue",
         config: { duration: 100 },
         rotate: 180,
       });
       await next({
         x: 500,
         y: 220.2058,
-        backgroundColor: "pink",
+        backgroundColor: "blue",
         config: { duration: 100 },
         rotate: 270,
       });
       await next({
         x: 500,
         y: 220.2058,
-        backgroundColor: "pink",
+        backgroundColor: "blue",
         config: { duration: 100 },
         rotate: 360,
       });
@@ -102,6 +98,7 @@ export const Test = ({
             x,
             y,
             backgroundColor: "orange",
+            opacity:1,
             config: { duration: 2 }, // Duración del bucle
           });
         }
@@ -114,6 +111,7 @@ export const Test = ({
           y: 100 + newY,
           backgroundColor: "bg-green-900",
           config: { duration: 500 },
+          opacity:1,
           rotate: 360,
         });
 

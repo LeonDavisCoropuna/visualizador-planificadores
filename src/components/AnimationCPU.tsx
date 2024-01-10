@@ -54,7 +54,7 @@ export const AnimationCPU = ({ gantt }: { gantt: Gantt[] }) => {
   }, [currentIndex, testData]);
 
   return (
-    <div className="border-[1px] border-black mt-20 relative h-[30em] w-[70em] flex ">
+    <div className="border-[1px] border-black mt-20 relative h-[30em] w-[70em] flex text-center">
       {testData.slice(0, currentIndex).map((testDataItem, index) => (
         <Test
           key={index}
@@ -68,12 +68,12 @@ export const AnimationCPU = ({ gantt }: { gantt: Gantt[] }) => {
 
       {/* <Boxes elements={testData} /> */}
 
-      <div className="w-24 bg-red-300">START</div>
-      <div className="w-32 bg-green-300">QUEUE</div>
+      <div className="w-24 bg-red-300 p-4 "><strong>Start</strong> </div>
+      <div className="w-32 bg-green-300 p-4"><strong>Queue</strong> </div>
       <div className="mt-30 ml-30 w-[38em] bg-blue-400 flex items-center h-full justify-center">
-        <div className="pt-5 w-24 h-24 bg-yellow-500 text-center">CPU</div>
+        <div className="pt-5 w-24 h-24 bg-yellow-500 text-center p-4"><strong>CPU</strong></div>
       </div>
-      <div className="w-[18em] bg-cyan-500">FINISH</div>
+      <div className="w-[18em] bg-cyan-500 p-4"><strong>Finish</strong></div>
     </div>
   );
 };

@@ -18,8 +18,10 @@ export const TableResult = ({
 
   return (
     <div>
-      <div>{title}</div>
-      <table>
+      <div className="max-h-[55em] overflow-auto text-center mb-6 mt-6">
+        <strong>{title}</strong>
+      </div>
+      <table className="max-h-[25em] overflow-auto text-center">
         <thead>
           <tr className="bg-orange-200">
             <th>Process ID</th>
