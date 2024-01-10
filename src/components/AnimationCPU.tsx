@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Test } from "./animation/Test";
 import { Gantt } from "../interface/processResponse.interface";
+import Boxes from "./animation/Boxes";
 
 export const AnimationCPU = ({ gantt }: { gantt: Gantt[] }) => {
   const [testData, setTestData] = useState<
@@ -39,22 +40,12 @@ export const AnimationCPU = ({ gantt }: { gantt: Gantt[] }) => {
 
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     setCurrentIndex((prevIndex) =>
-  //       prevIndex + 1 < testData.length ? prevIndex + 1 : prevIndex
-  //     );
-  //   }, 10);
-
-  //   // Cleanup interval on component unmount or when all tests are created
-  //   return () => clearInterval(interval);
-  // }, [currentIndex, testData.length]);
 
   const renderTests = (index: number) => {
     if (index < testData.length) {
       setTimeout(() => {
         setCurrentIndex(index + 1);
-      }, 1000);
+      }, 3200);
     }
   };
 
@@ -74,6 +65,9 @@ export const AnimationCPU = ({ gantt }: { gantt: Gantt[] }) => {
           isInQueue={testDataItem.progress}
         />
       ))}
+
+      {/* <Boxes elements={testData} /> */}
+
       <div className="w-24 bg-red-300">START</div>
       <div className="w-32 bg-green-300">QUEUE</div>
       <div className="mt-30 ml-30 w-[38em] bg-blue-400 flex items-center h-full justify-center">

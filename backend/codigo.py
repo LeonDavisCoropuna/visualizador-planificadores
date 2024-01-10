@@ -5,6 +5,7 @@ from enum import Enum
 import copy
 import json
 import random
+import os
 app = Flask(__name__)
 CORS(app)
 class Algorithm(Enum):
@@ -25,6 +26,7 @@ class Proceso:
         self.job = job
         self.burst_time = burst_time
         self.arrival_time = arrival_time
+        self.name_process = None
         self.finish_time = None
         self.turnaround_time = None
         self.waiting_time = None
@@ -205,7 +207,66 @@ def select_algortimo(algoritmo, procesos_lst, quantum):
         temp = obtener_matriz(procesos, gantt)
         return (procesos, temp, gantt)
     return None
+def get_burst_time(pid):
+    try:
+        with open(f"/proc/{pid}/stat", 'r') as stat_file:
+            stat_data = stat_file.read().split()
+            utime_ticks = int(stat_data[13])
+            stime_ticks = int(stat_data[14])
+            hz = os.sysconf(os.sysconf_names['SC_CLK_TCK'])
+            burst_time = (utime_ticks + stime_ticks) / hz  # en segundos
+            burst_time = str(int(burst_time))[:1]
+            return int(burst_time)
+    except FileNotFoundError:
+        return 0
+def get_procesos():
+    procesos_array = []
+    process_list = "process_list.txt"
+    process_names = {}
+    count = 0
 
+    with open(process_list, 'w') as process_file:
+        with os.scandir('/proc') as entries:
+            for entry in entries:
+                if count >=25: #solo los 25 primeros procesos
+                    break
+                if entry.name.isdigit():  # Verificar si el nombre es un PID
+                    pid = entry.name
+                    cmdline_path = f"/proc/{pid}/status"
+
+                    try:
+                        with open(cmdline_path, 'r') as cmdline_file:
+                            cmdline = cmdline_file.readline().strip()
+                            name = cmdline.split()[1] if cmdline else ''
+
+                            burst_time = get_burst_time(pid)
+                            priority = None  # No se está utilizando en esta parte del código
+
+                            if burst_time != 0:
+                                # Verificar si el nombre ya existe en el diccionario
+                                if name in process_names:
+                                    continue  # Si el nombre ya existe, omitir este proceso
+                                else:
+                                    process_names[name] = pid
+
+                                    process_info = f"{pid} {name} {burst_time} {priority}\n"
+                                    process_file.write(process_info)
+
+                                    job = pid
+                                    arrival_time = 0  # Establecerá arrival_time más tarde
+
+                                    nuevo_proceso = Proceso(job, burst_time, arrival_time)
+                                    procesos_array.append(nuevo_proceso)
+                                    count += 1
+
+                    except FileNotFoundError:
+                        continue
+    assign_sequential_arrival_time(procesos_array)
+    return procesos_array
+def assign_sequential_arrival_time(procesos_array):
+    # Asignar valores de arrival_time secuenciales comenzando desde 1
+    for index, proceso in enumerate(procesos_array):
+        proceso.arrival_time = index + 1
 def generar_tres_procesos():
     procesos_array = []
 
@@ -279,11 +340,11 @@ def planificar():
 @app.route('/loadProcess', methods=['GET'])
 def obtener_procesos():
     # Aquí puedes devolver una lista de nombres de algoritmos o cualquier otro dato que desees para la solicitud GET.
-    procesos_so_linux = generar_tres_procesos()
+    procesos_so_linux = get_procesos()
     formatted_procesos = []
     for proceso in procesos_so_linux:
         formatted_proceso = {
-            'id': int(proceso.job.split('_')[1]),
+            'id': int(proceso.job),
             'arrivalTime': proceso.arrival_time,
             'burstTime': proceso.burst_time
         }
