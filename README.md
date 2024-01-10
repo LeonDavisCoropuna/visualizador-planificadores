@@ -31,23 +31,22 @@ Este proyecto tiene como objetivo desarrollar un visualizador de algoritmos de p
 1. **Clonar el Repositorio:**
    ```bash
    git clone https://github.com/tu-usuario/visualizador-algoritmos-planificacion.git
-   ```bash
+   ```
 ## Instalación y Ejecución:
 
 ### Instalar Dependencias Frontend:
 
 ```bash
-cd visualizador-algoritmos-planificacion/frontend
 npm install
 ```
 
 ## Ejecutar Aplicación:
-l
+### Frontend
 ``` bash
 npm run dev
-l
+
 ```
-l
+### Backend
 ```bash
 
 cd ../backend
